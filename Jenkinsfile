@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        DOCKERHUB_CREDENTIALS = credentials('dockerhub')
+        //DOCKERHUB_CREDENTIALS = credentials('dockerhub')
         CAR_INVENTORY_DOCKER_IMAGE = 'pax7898/car_inventory'
         VIN_DECODER_DOCKER_IMAGE = 'pax7898/vin_decoder'
     }
