@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: car-inventory-deployment
+spec:
+  replicas: 1
+  # Seleziona i Pods da replicare
+  selector:
+    matchLabels:
+      app: car-inventory
+  template:
+    metadata:
+      labels:
+        app: car-inventory
+    spec:
+      containers:
+      - name: car-inventory
+        image: pax7898/car_inventory:latest
+        ports:
+        - containerPort: 8081
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: car-inventory-service
+spec:
+  type: LoadBalancer #External Service
+  selector:
+    app: car-inventory
+  ports:
+    - protocol: TCP
+      port: 8081   # external Port (within the cluster)
+      targetPort: 8081 # internal Port (within the Pod)

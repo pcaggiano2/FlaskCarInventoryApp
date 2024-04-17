@@ -15,9 +15,9 @@ spec:
     spec:
       containers:
       - name: vin-decoder
-        image: pax7898/vin_decoder
+        image: pax7898/vin_decoder:latest
         ports:
-        - containerPort: 8081
+        - containerPort: 8082
 ---
 apiVersion: v1
 kind: Service
@@ -30,5 +30,5 @@ spec:
     app: vin-decoder
   ports:
     - protocol: TCP
-      port: 8081   # external Port (within the cluster)
-      targetPort: 8081 # internal Port (within the Pod)
+      port: 8082   # external Port (within the cluster)
+      targetPort: 8082 # internal Port (within the Pod)
