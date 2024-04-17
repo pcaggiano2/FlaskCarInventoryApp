@@ -10,9 +10,6 @@ pipeline {
     stages{
         stage("Dockerize"){
             steps{
-                sh 'echo $DOCKERHUB_CREDENTIALS'
-                sh 'echo $DOCKERHUB_CREDENTIALS_USR'
-                sh 'echo $DOCKERHUB_CREDENTIALS_PSW'
                 sh 'docker build --platform linux/amd64 -t $CAR_INVENTORY_DOCKER_IMAGE car_inventory/.'
                 sh 'docker build --platform linux/amd64 -t $VIN_DECODER_DOCKER_IMAGE vin_decoder/.'
             }
@@ -20,7 +17,7 @@ pipeline {
 
         stage("Login"){
             steps{
-                sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+                sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR -p $DOCKERHUB_CREDENTIALS_PWD '
             }
         }
 
