@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    tools {
+        nodejs "nodejs_21_7_3"
+    }
+
     environment {
         CAR_INVENTORY_DOCKERFILE_PATH = 'car_inventory/.'
         VIN_DECODER_DOCKERFILE_PATH = 'vin_decoder/.'
@@ -10,6 +14,8 @@ pipeline {
 
         CAR_INVENTORY_YAML = 'car_inventory/car_inventory.yaml'
         VIN_DECODER_YAML = 'vin_decoder/vin_decoder.yaml'
+
+        POSTMAN_API_KEY = 'PMAK-6620f2f8229990000138ca73-d962f419f0d6eaa784aad2c94127114727'
     }   
 
     stages {
@@ -51,13 +57,24 @@ pipeline {
             }
         }
 
-        stage("Check Pods"){
-            steps{
-                sh "kubectl get pods -A"
-                sh "kubectl get deployment -A"
-                sh "kubectl get service -A"
+        stage('Install Postman CLI') {
+            steps {
+                sh 'curl -o- "https://dl-cli.pstmn.io/install/osx_arm64.sh" | sh'
             }
         }
+
+        stage('Postman CLI Login') {
+            steps {
+                sh "postman login --with-api-key ${POSTMAN_API_KEY}"
+            }
+        }
+
+        stage('Running collection') {
+            steps {
+                sh 'postman collection run "34340469-3bbe4d66-0367-45bc-a674-e6f9aac25bf9"'
+            }
+        }
+            
     }
 }
 
