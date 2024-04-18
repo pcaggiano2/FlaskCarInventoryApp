@@ -57,21 +57,15 @@ pipeline {
             }
         }
 
-        stage('Install Postman CLI') {
-            steps {
-                sh 'curl -o- "https://dl-cli.pstmn.io/install/osx_arm64.sh" | sudo -S bash'
-            }
-        }
-
         stage('Postman CLI Login') {
             steps {
-                sh "postman login --with-api-key ${POSTMAN_API_KEY}"
+                sh "/usr/local/bin/postman login --with-api-key ${POSTMAN_API_KEY}"
             }
         }
 
         stage('Running collection') {
             steps {
-                sh 'postman collection run "34340469-3bbe4d66-0367-45bc-a674-e6f9aac25bf9"'
+                sh '/usr/local/bin/postman collection run "34340469-3bbe4d66-0367-45bc-a674-e6f9aac25bf9"'
             }
         }
             
