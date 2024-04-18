@@ -45,9 +45,7 @@ pipeline {
 
         stage("Check Pods"){
             steps{
-                sh "kubectl get pods -la"
-                sh "kubectl get deployment -la"
-                sh "kubectl get service -la"
+                sh "kubectl get -A"
             }
         }
     }
