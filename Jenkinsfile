@@ -59,7 +59,7 @@ pipeline {
 
         stage('Install Postman CLI') {
             steps {
-                sh 'curl -o- "https://dl-cli.pstmn.io/install/osx_arm64.sh" | sh'
+                sh 'curl -o- "https://dl-cli.pstmn.io/install/osx_arm64.sh" | sudo -S bash'
             }
         }
 
