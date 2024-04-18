@@ -13,6 +13,14 @@ pipeline {
     }   
 
     stages {
+        stage ("Cleaning"){
+            steps {
+                sh "kubectl delete service vin-decoder-service"
+                sh "kubectl delete service car-inventory-service"
+                sh "kubectl delete deployment vin-decoder-deployment"
+                sh "kubectl delete deployment car-inventory-deployment"
+            }
+        }
         stage("Dockerize") {
             steps {
                 script {
