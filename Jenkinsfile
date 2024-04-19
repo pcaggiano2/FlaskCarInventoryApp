@@ -1,10 +1,6 @@
 pipeline {
     agent any
 
-    tools {
-        nodejs "nodejs_21_7_3"
-    }
-
     environment {
         CAR_INVENTORY_DOCKERFILE_PATH = 'car_inventory/.'
         VIN_DECODER_DOCKERFILE_PATH = 'vin_decoder/.'
@@ -64,6 +60,9 @@ pipeline {
         }
 
         stage('Running collection') {
+            tools {
+                nodejs "nodejs_21_7_3"
+            }
             steps {
                 sh '/usr/local/bin/postman collection run "34340469-3bbe4d66-0367-45bc-a674-e6f9aac25bf9"'
             }
