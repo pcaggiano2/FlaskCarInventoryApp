@@ -1,3 +1,23 @@
+// Check if service exists before attempting to delete
+def deleteServiceIfExists(serviceName) {
+    def serviceExists = sh(script: "kubectl get service $serviceName", returnStatus: true) == 0
+    if (serviceExists) {
+        sh "kubectl delete service $serviceName"
+    } else {
+        println "Service $serviceName does not exist, skipping deletion."
+    }
+}
+
+// Check if deployment exists before attempting to delete
+def deleteDeploymentIfExists(deploymentName) {
+    def deploymentExists = sh(script: "kubectl get deployment $deploymentName", returnStatus: true) == 0
+    if (deploymentExists) {
+        sh "kubectl delete deployment $deploymentName"
+    } else {
+        println "Deployment $deploymentName does not exist, skipping deletion."
+    }
+}
+
 pipeline {
     agent any
 
@@ -18,27 +38,6 @@ pipeline {
         stage ("Cleaning"){
             steps {
                 script{
-
-                    // Check if service exists before attempting to delete
-                    def deleteServiceIfExists(serviceName) {
-                        def serviceExists = sh(script: "kubectl get service $serviceName", returnStatus: true) == 0
-                        if (serviceExists) {
-                            sh "kubectl delete service $serviceName"
-                        } else {
-                            println "Service $serviceName does not exist, skipping deletion."
-                        }
-                    }
-
-                    // Check if deployment exists before attempting to delete
-                    def deleteDeploymentIfExists(deploymentName) {
-                        def deploymentExists = sh(script: "kubectl get deployment $deploymentName", returnStatus: true) == 0
-                        if (deploymentExists) {
-                            sh "kubectl delete deployment $deploymentName"
-                        } else {
-                            println "Deployment $deploymentName does not exist, skipping deletion."
-                        }
-                    }
-                
                     // Delete services
                     deleteServiceIfExists("vin-decoder-service")
                     deleteServiceIfExists("car-inventory-service")
@@ -46,11 +45,10 @@ pipeline {
                     // Delete deployments
                     deleteDeploymentIfExists("vin-decoder-deployment")
                     deleteDeploymentIfExists("car-inventory-deployment")
-
                 }
             }   
         }
-        
+
         stage("Dockerize") {
             steps {
                 script {
